@@ -43,10 +43,9 @@ create table ck_unit
 alter table ck_unit
     owner to postgres;
 
--- User table --
 create table usr_info
 (
-    id       bigint not null
+    id       bigserial
         constraint usr_info_pk
             primary key,
     login    varchar not null,
@@ -56,34 +55,13 @@ create table usr_info
 alter table usr_info
     owner to postgres;
 
--- Role table --
 create table usr_role
 (
-    id   bigint
+    id   bigserial
         constraint usr_role_pk
             primary key,
     name varchar not null
-        constraint check_role_name
-            check (upper((name)::text) = ANY
-                   (ARRAY['ADMINISTRATOR'::text, 'VIEWER'::text]))
 );
 
 alter table usr_role
-    owner to postgres;
-
-create unique index ix_fx_role_name
-    on usr_role (name);
-
--- User_Role table --
-create table usr_user_role
-(
-    user_id bigint not null
-        constraint fk_user
-            references usr_info,
-    role_id bigint not null
-        constraint fk_role
-            references usr_role
-);
-
-alter table usr_user_role
     owner to postgres;
